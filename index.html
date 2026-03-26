@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tasty Trails – Menu</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0a07;
+    --surface: #1a1410;
+    --card: #221c15;
+    --border: #3a2e20;
+    --gold: #c9954a;
+    --gold-light: #e8b96a;
+    --cream: #f5edd8;
+    --muted: #8a7a62;
+    --accent: #7c3c28;
+    --green: #4a7c59;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--cream);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    font-size: 14px;
+  }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(160deg, #1a0e06 0%, #2c1a0a 50%, #0d0a07 100%);
+    padding: 48px 20px 36px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid var(--border);
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 0%, rgba(201,149,74,0.18) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .logo-ring {
+    width: 80px; height: 80px;
+    border-radius: 50%;
+    border: 2px solid var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 16px;
+    background: radial-gradient(circle, rgba(201,149,74,0.12), transparent);
+    font-size: 32px;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(28px, 7vw, 44px);
+    font-weight: 700;
+    color: var(--gold-light);
+    letter-spacing: 2px;
+  }
+  .hero p {
+    color: var(--muted);
+    margin-top: 6px;
+    font-size: 12px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+  }
+  .tagline {
+    display: inline-block;
+    margin-top: 14px;
+    padding: 4px 16px;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 1px;
+  }
+
+  /* SEARCH */
+  .search-wrap {
+    padding: 16px 16px 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 12px;
+  }
+  .search-input {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--cream);
+    padding: 10px 14px 10px 38px;
+    font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
+    outline: none;
+    transition: border 0.2s;
+  }
+  .search-input::placeholder { color: var(--muted); }
+  .search-input:focus { border-color: var(--gold); }
+  .search-wrap .icon {
+    position: absolute;
+    left: 28px; top: 50%;
+    transform: translateY(-50%);
+    color: var(--muted);
+    font-size: 15px;
+    pointer-events: none;
+  }
+  .search-box { position: relative; }
+
+  /* CATEGORY TABS */
+  .tabs-wrap {
+    overflow-x: auto;
+    white-space: nowrap;
+    padding: 12px 16px;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    scrollbar-width: none;
+  }
+  .tabs-wrap::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    display: inline-block;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    background: transparent;
+    margin-right: 8px;
+    transition: all 0.2s;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .tab-btn.active, .tab-btn:hover {
+    background: var(--gold);
+    color: var(--bg);
+    border-color: var(--gold);
+  }
+
+  /* SECTIONS */
+  .menu-body { padding: 0 0 60px; }
+
+  .section { padding: 24px 16px 8px; }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--gold-light);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 10px;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-title .icon { font-size: 18px; }
+
+  .subsection-title {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin: 18px 0 10px;
+    font-weight: 500;
+  }
+
+  /* ITEM CARDS */
+  .item-list { display: flex; flex-direction: column; gap: 2px; }
+
+  .item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 12px;
+    border-radius: 8px;
+    background: var(--surface);
+    border: 1px solid transparent;
+    transition: all 0.2s;
+    gap: 8px;
+  }
+  .item:hover {
+    border-color: var(--border);
+    background: var(--card);
+  }
+  .item-name {
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--cream);
+    flex: 1;
+  }
+  .item-price {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--gold);
+    white-space: nowrap;
+    font-family: 'Playfair Display', serif;
+  }
+
+  /* VARIANT GROUPS */
+  .variant-group {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 8px;
+    overflow: hidden;
+  }
+  .variant-group-header {
+    padding: 10px 12px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--cream);
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+  }
+  .variant-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 7px 12px;
+    border-bottom: 1px solid rgba(58,46,32,0.5);
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .variant-row:last-child { border-bottom: none; }
+  .variant-row span:last-child { color: var(--gold); font-weight: 500; }
+
+  /* FOOTER */
+  footer {
+    text-align: center;
+    padding: 20px;
+    color: var(--muted);
+    font-size: 11px;
+    border-top: 1px solid var(--border);
+    letter-spacing: 1px;
+  }
+
+  /* HIDDEN */
+  .hidden { display: none !important; }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="logo-ring">🍜</div>
+  <h1>Tasty Trails</h1>
+  <p>Restaurant &amp; Café</p>
+  <div class="tagline">✦ Full Menu ✦</div>
+</div>
+
+<div class="search-wrap">
+  <div class="search-box">
+    <span class="icon">🔍</span>
+    <input class="search-input" type="text" placeholder="Search dishes…" oninput="filterMenu(this.value)" />
+  </div>
+</div>
+
+<div class="tabs-wrap" id="tabs">
+  <button class="tab-btn active" onclick="goToSection('starters', this)">Starters</button>
+  <button class="tab-btn" onclick="goToSection('momos', this)">Momos</button>
+  <button class="tab-btn" onclick="goToSection('chinese', this)">Chinese</button>
+  <button class="tab-btn" onclick="goToSection('rice', this)">Rice</button>
+  <button class="tab-btn" onclick="goToSection('pork', this)">Pork</button>
+  <button class="tab-btn" onclick="goToSection('chicken', this)">Chicken</button>
+  <button class="tab-btn" onclick="goToSection('indian', this)">Indian</button>
+  <button class="tab-btn" onclick="goToSection('beverages', this)">Drinks</button>
+</div>
+
+<div class="menu-body" id="menuBody">
+
+  <!-- STARTERS -->
+  <div class="section" id="starters">
+    <div class="section-title"><span class="icon">🥗</span> Starters</div>
+
+    <div class="subsection-title">Chicken</div>
+    <div class="item-list">
+      <div class="item"><span class="item-name">Chicken Chop</span><span class="item-price">Rs. 50</span></div>
+      <div class="item"><span class="item-name">Chicken Cheese Balls</span><span class="item-price">Rs. 140</span></div>
+      <div class="item"><span class="item-name">Baby Corn Chilly Dry</span><span class="item-price">Rs. 90</span></div>
+    </div>
+
+    <div class="subsection-title">Fries</div>
+    <div class="item-list">
+      <div class="item"><span class="item-name">French Fries</span><span class="item-price">Rs. 60</span></div>
+      <div class="item"><span class="item-name">Peri Peri French Fries</span><span class="item-price">Rs. 100</span></div>
+      <div class="item"><span class="item-name">Chilli Potato</span><span class="item-price">Rs. 80</span></div>
+      <div class="item"><span class="item-name">Special Chilli Potato</span><span class="item-price">Rs. 140</span></div>
+    </div>
+
+    <div class="subsection-title">Pakora</div>
+    <div class="item-list">
+      <div class="item"><span class="item-name">Veg Pakora</span><span class="item-price">Rs. 40</span></div>
+      <div class="item"><span class="item-name">Chilli Veg Pakora</span><span class="item-price">Rs. 70</span></div>
+      <div class="item"><span class="item-name">Chicken Pakora</span><span class="item-price">Rs. 100</span></div>
+      <div class="item"><span class="item-name">Bread Pakora</span><span class="item-price">Rs. 70</span></div>
+    </div>
+
+    <div class="subsection-title">Cutlets</div>
+    <div class="item-list">
+      <div class="item"><span class="item-name">Veg Cutlet</span><span class="item-price">Rs. 60</span></div>
+      <div class="item"><span class="item-name">Veg Cheese</span><span class="item-price">Rs. 70</span></div>
+      <div class="item"><span class="item-name">Chicken Cutlet</span><span class="item-price">Rs. 80</span></div>
+    </div>
+
+    <div class="subsection-title">Wonton Fry</div>
+    <div class="item-list">
+      <div class="item"><span class="item-name">Veg Wanton Fry</span><span class="item-price">Rs. 80</span></div>
+      <div class="item"><span class="item-name">Chicken Wanton Fry</span><span class="item-price">Rs. 100</span></div>
+      <div class="item"><span class="item-name">Pork Wanton Fry</span><span class="item-price">Rs. 120</span></div>
+    </div>
+
+    <div class="subsection-title">Maggie</div>
+    <div class="item-list">
+      <div class="item"><span class="item-name">Plain Maggie</span><span class="item-price">Rs. 40</span></div>
+      <div class="item"><span class="item-name">Egg Maggie</span><span class="item-price">Rs. 50</span></div>
+      <div class="item"><span class="item-name">Chicken Maggie</span><span class="item-price">Rs. 60</span></div>
+      <div class="item"><span class="item-name">Pork Maggie</span><span class="item-price">Rs. 80</span></div>
+    </div>
+
+    <div class="subsection-title">Soup</div>
+    <div class="item-list">
+      <div class="item"><span class="item-name">Plain Soup</span><span class="item-price">Rs. 30</span></div>
+      <div class="item"><span class="item-name">Veg Wanton Soup</span><span class="item-price">Rs. 90</span></div>
+      <div class="item"><span class="item-name">Chicken Wanton Soup</span><span class="item-price">Rs. 110</span></div>
+      <div class="item"><span class="item-name">Pork Wanton Soup</span><span class="item-price">Rs. 130</span></div>
+    </div>
+
+    <div class="subsection-title">Manchow Soup</div>
+    <div class="item-list">
+      <div class="item"><span class="item-name">Veg Manchow Soup</span><span class="item-price">Rs. 100</span></div>
+      <div class="item"><span class="item-name">Chicken Manchow Soup</span><span class="item-price">Rs. 120</span></div>
+      <div class="item"><span class="item-name">Pork Manchow Soup</span><span class="item-price">Rs. 140</span></div>
+      <div class="item"><span class="item-name">Mix Manchow Soup</span><span class="item-price">Rs. 160</span></div>
+    </div>
+
+    <div class="subsection-title">Soup Chow</div>
+    <div class="item-list">
+      <div class="item"><span class="item-name">Veg Soup Chow</span><span class="item-price">Rs. 100</span></div>
+      <div class="item"><span class="item-name">Chicken Soup Chow</span><span class="item-price">Rs. 120</span></div>
+      <div class="item"><span class="item-name">Pork Soup Chow</span><span class="item-price">Rs. 140</span></div>
+      <div class="item"><span class="item-name">Mix Soup Chow</span><span class="item-price">Rs. 160</span></div>
+    </div>
+
+    <div class="subsection-title">Soup Varieties</div>
+    <div class="item-list">
+      <div class="item"><span class="item-name">Chicken Ball Soup</span><span class="item-price">Rs. 100</span></div>
+      <div class="item"><span class="item-name">Lung Fung Soup</span><span class="item-price">Rs. 80</span></div>
+      <div class="item"><span class="item-name">Chicken Clear Soup</span><span class="item-price">Rs. 50</span></div>
+      <div class="item"><span class="item-name">Chicken Hot &amp; Sour Soup</span><span class="item-price">Rs. 70</span></div>
+      <div class="item"><span class="item-name">Chicken Sweet Corn Soup</span><span class="item-price">Rs. 70</span></div>
+    </div>
+
+    <div class="subsection-title">Rolls</div>
+    <div class="item-list">
+      <div class="item"><span class="item-name">Veg Roll</span><span class="item-price">Rs. 50</span></div>
+      <div class="item"><span class="item-name">Egg Roll</span><span class="item-price">Rs. 70</span></div>
+      <div class="item"><span class="item-name">Chicken Roll</span><span class="item-price">Rs. 80</span></div>
+      <div class="item"><span class="item-name">Chicken Egg Roll</span><span class="item-price">Rs. 100</span></div>
+      <div class="item"><span class="item-name">Paneer Roll</span><span class="item-price">Rs. 110</span></div>
+      <div class="item"><span class="item-name">Chilli Paneer Roll</span><span class="item-price">Rs. 120</span></div>
+      <div class="item"><span class="item-name">Prawns Roll</span><span class="item-price">Rs. 100</span></div>
+      <div class="item"><span class="item-name">Mushroom Roll</span><span class="item-price">Rs. 100</span></div>
+      <div class="item"><span class="item-name">Sweet Corn Roll</span><span class="item-price">Rs. 100</span></div>
+      <div class="item"><span class="item-name">Sweet Corn Chicken</span><span class="item-price">Rs. 120</span></div>
+    </div>
+
+    <div class="subsection-title">Schezwan Roll</div>
+    <div class="item-list">
+      <div class="item"><span class="item-name">Veg Schezwan Roll</span><span class="item-price">Rs. 80</span></div>
+      <div class="item"><span class="item-name">Chicken Schezwan Roll</span><span class="item-price">Rs. 100</span></div>
+      <div class="item"><span class="item-name">Pork Schezwan Roll</span><span class="item-price">Rs. 120</span></div>
+    </div>
+
+    <div class="subsection-title">Spring Roll</div>
+    <div class="item-list">
+      <div class="item"><span class="item-name">Veg Spring Roll</span><span class="item-price">Rs. 60</span></div>
+      <div class="item"><span class="item-name">Chicken Spring Roll</span><span class="item-price">Rs. 80</span></div>
+      <div class="item"><span class="item-name">Pork Spring Roll</span><span class="item-price">Rs. 100</span></div>
+    </div>
+
+    <div class="subsection-title">Burgers</div>
+    <div class="item-list">
+      <div class="item"><span class="item-name">Veg Burger</span><span class="item-price">Rs. 60</span></div>
+      <div class="item"><span class="item-name">Aloo Tikki Burger</span><span class="item-price">Rs. 70</span></div>
+      <div class="item"><span class="item-name">Egg Burger</span><span class="item-price">Rs. 70</span></div>
+      <div class="item"><span class="item-name">Cheese Burger</span><span class="item-price">Rs. 70</span></div>
+      <div class="item"><span class="item-name">Chicken Burger</span><span class="item-price">Rs. 80</span></div>
+      <div class="item"><span class="item-name">Chicken Cheese Burger</span><span class="item-price">Rs. 100</span></div>
+      <div class="item"><span class="item-name">Chicken Crispy Burger</span><span class="item-price">Rs. 130</span></div>
+      <div class="item"><span class="item-name">Extra Cheese</span><span class="item-price">Rs. 30 extra</span></div>
+    </div>
+
+    <div class="subsection-title">Sandwiches</div>
+    <div class="item-list">
+      <div class="item"><span class="item-name">Bread &amp; Butter</span><span class="item-price">Rs. 40</span></div>
+      <div class="item"><span class="item-name">Garlic Cheese Bread</span><span class="item-price">Rs. 80</span></div>
+      <div class="item"><span class="item-name">Bread Omelette</span><span class="item-price">Rs. 50</span></div>
+      <div class="item"><span class="item-name">Chicken Cheese Sandwich</span><span class="item-price">Rs. 90</span></div>
+      <div class="item"><span class="item-name">Aloo Masala Sandwich</span><span class="item-price">Rs. 90</span></div>
+      <div class="item"><span class="item-name">Egg Sandwich</span><span class="item-price">Rs. 50</span></div>
+      <div class="item"><span class="item-name">Veg Sandwich</span><span class="item-price">Rs. 40</span></div>
+      <div class="item"><span class="item-name">Chicken Sandwich</span><span class="item-price">Rs. 60</span></div>
+    </div>
+  </div>
+
+  <!-- MOMOS -->
+  <div class="section" id="momos">
+    <div class="section-title"><span class="icon">🥟</span> Momo's</div>
+
+    <div class="subsection-title">Chicken Momo (Small)</div>
+    <div class="item-list">
+      <div class="item"><span class="item-name">Steam</span><span class="item-price">Rs. 70</span></div>
+      <div class="item"><span class="item-name">Fry</span><span class="item-price">Rs. 80</span></div>
+      <div class="item"><span class="item-name">Peri Peri</span><span class="item-price">Rs. 90</span></div>
+      <div class="item"><span class="item-name">Schezwan</span><span class="item-price">Rs. 100</span></div>
+    </div>
+
+    <div class="subsection-title">Pork Momo (Small)</div>
+    <div class="item-list">
+      <div class="item"><span class="item-name">Steam</span><span class="item-price">Rs. 80</span></div>
+      <div class="item"><span class="item-name">Fry</span><span class="item-price">Rs. 90</span></div>
+      <div class="item"><span class="item-name">Peri Peri</span><span class="item-price">Rs. 100</span></div>
+      <div class="item"><span class="item-name">Schezwan</span><span class="item-price">Rs. 120</span></div>
+    </div>
+
+    <div class="subsection-title">Wanton Steam – Options</div>
+    <div class="item-list">
+      <div class="item"><span class="item-name">Veg Wanton Steam</span><span class="item-price">Rs. 150</span></div>
+      <div class="item"><span class="item-name">Chicken Wanton Steam</span><span class="item-price">Rs. 170</span></div>
+      <div class="item"><span class="item-name">Pork Wanton Steam</span><span class="item-price">Rs. 200</span></div>
+    </div>
+
+    <div class="subsection-title">Chow Noodles</div>
+    <div class="item-list">
+      <div class="item"><span class="item-name">Veg</span><span class="item-price">Rs. 100</span></div>
+      <div class="item"><span class="item-name">Egg</span><span class="item-price">Rs. 120</span></div>
+      <div class="item"><span class="item-name">Chicken</span><span class="item-price">Rs. 140</span></div>
+      <div class="item"><span class="item-name">Pork</span><span class="item-price">Rs. 160</span></div>
+      <div class="item"><span class="item-name">Mixed</span><span class="item-price">Rs. 180</span></div>
+      <div class="item"><span class="item-name">Prawn</span><span class="item-price">Rs. 180</span></div>
+    </div>
+  </div>
+
+  <!-- CHINESE ITEMS -->
+  <div class="section" id="chinese">
+    <div class="section-title"><span class="icon">🍝</span> Chinese Items</div>
+
+    <div class="subsection-title">Chowmein</div>
+    <div class="item-list">
+      <div class="item"><span class="item-name">Veg</span><span class="item-price">Rs. 120</span></div>
+      <div class="item"><span class="item-name">Egg</span><span class="item-price">Rs. 140</span></div>
+      <div class="item"><span class="item-name">Chicken</span><span class="item-price">Rs. 150</span></div>
+      <div class="item"><span class="item-name">Pork</span><span class="item-price">Rs. 170</span></div>
+      <div class="item"><span class="item-name">Mixed</span><span class="item-price">Rs. 190</span></div>
+      <div class="item"><span class="item-name">Prawn</span><span class="item-price">Rs. 190</span></div>
+    </div>
+
+    <div class="subsection-title">American Chopsuey</div>
+    <div class="item-list">
+      <div class="item"><span class="item-name">Veg</span><span class="item-price">Rs. 130</span></div>
+      <div class="item"><span class="item-name">Egg</span><span class="item-price">Rs. 150</span></div>
+      <div class="item"><span class="item-name">Chicken</span><span class="item-price">Rs. 170</span></div>
+      <div class="item"><span class="item-name">Pork</span><span class="item-price">Rs. 190</span></div>
+      <div class="item"><span class="item-name">Mixed</span><span class="item-price">Rs. 210</span></div>
+      <div class="item"><span class="item-name">Prawn</span><span class="item-price">Rs. 200</span></div>
+    </div>
+
+    <div class="subsection-title">Cheese Chow</div>
+    <div class="item-list">
+      <div class="item"><span class="item-name">Veg</span><span class="item-price">Rs. 110</span></div>
+      <div class="item"><span class="item-name">Egg</span><span class="item-price">Rs. 130</span></div>
+      <div class="item"><span class="item-name">Chicken</span><span class="item-price">Rs. 160</span></div>
+      <div class="item"><span class="item-name">Pork</span><span class="item-price">Rs. 180</span></div>
+      <div class="item"><span class="item-name">Mixed</span><span class="item-price">Rs. 200</span></div>
+    </div>
+
+    <div class="subsection-title">Pad Thai Noodles</div>
+    <div class="item-list">
+      <div class="item"><span class="item-name">Veg</span><span class="item-price">Rs. 160</span></div>
+      <div class="item"><span class="item-name">Egg</span><span class="item-price">Rs. 180</span></div>
+      <div class="item"><span class="item-name">Chicken</span><span class="item-price">Rs. 200</span></div>
+      <div class="item"><span class="item-name">Pork</span><span class="item-price">Rs. 220</span></div>
+      <div class="item"><span class="item-name">Mixed</span><span class="item-price">Rs. 250</span></div>
+      <div class="item"><span class="item-name">Prawn</span><span class="item-price">Rs. 230</span></div>
+    </div>
+
+    <div class="subsection-title">Hakka Noodles</div>
+    <div class="item-list">
+      <div class="item"><span class="item-name">Veg</span><span class="item-price">Rs. 100</span></div>
+      <div class="item"><span class="item-name">Egg</span><span class="item-price">Rs. 120</span></div>
+      <div class="item"><span class="item-name">Chicken</span><span class="item-price">Rs. 140</span></div>
+      <div class="item"><span class="item-name">Pork</span><span class="item-price">Rs. 160</span></div>
+      <div class="item"><span class="item-name">Mixed</span><span class="item-price">Rs. 180</span></div>
+      <div class="item"><span class="item-name">Prawn</span><span class="item-price">Rs. 180</span></div>
+    </div>
+
+    <div class="subsection-title">Schezwan Chow</div>
+    <div class="item-list">
+      <div class="item"><span class="item-name">Veg</span><span class="item-price">Rs. 120</span></div>
+      <div class="item"><span class="item-name">Egg</span><span class="item-price">Rs. 140</span></div>
+      <div class="item"><span class="item-name">Chicken</span><span class="item-price">Rs. 160</span></div>
+      <div class="item"><span class="item-name">Pork</span><span class="item-price">Rs. 180</span></div>
+      <div class="item"><span class="item-name">Mixed</span><span class="item-price">Rs. 200</span></div>
+      <div class="item"><span class="item-name">Prawn</span><span class="item-price">Rs. 200</span></div>
+    </div>
+
+    <div class="subsection-title">Garlic Chow</div>
+    <div class="item-list">
+      <div class="item"><span class="item-name">Veg</span><span class="item-price">Rs. 120</span></div>
+      <div class="item"><span class="item-name">Egg</span><span class="item-price">Rs. 140</span></div>
+      <div class="item"><span class="item-name">Chicken</span><span class="item-price">Rs. 160</span></div>
+      <div class="item"><span class="item-name">Pork</span><span class="item-price">Rs. 180</span></div>
+      <div class="item"><span class="item-name">Mixed</span><span class="item-price">Rs. 200</span></div>
+      <div class="item"><span class="item-name">Prawn</span><span class="item-price">Rs. 200</span></div>
+    </div>
+
+    <div class="subsection-title">Garlic Chilli Chow</div>
+    <div class="item-list">
+      <div class="item"><span class="item-name">Veg</span><span class="item-price">Rs. 130</span></div>
+      <div class="item"><span class="item-name">Egg</span><span class="item-price">Rs. 150</span></div>
+      <div class="item"><span class="item-name">Chicken</span><span class="item-price">Rs. 170</span></div>
+      <div class="item"><span class="item-name">Pork</span><span class="item-price">Rs. 190</span></div>
+      <div class="item"><span class="item-name">Mixed</span><span class="item-price">Rs. 210</span></div>
+      <div class="item"><span class="item-name">Prawn</span><span class="item-price">Rs. 200</span></div>
+    </div>
+
+    <div class="subsection-title">Malaysian Chow</div>
+    <div class="item-list">
+      <div class="item"><span class="item-name">Veg</span><span class="item-price">Rs. 130</span></div>
+      <div class="item"><span class="item-name">Egg</span><span class="item-price">Rs. 150</span></div>
+      <div class="item"><span class="item-name">Chicken</span><span class="item-price">Rs. 170</span></div>
+      <div class="item"><span class="item-name">Pork</span><span class="item-price">Rs. 190</span></div>
+      <div class="item"><span class="item-name">Mixed</span><span class="item-price">Rs. 210</span></div>
+      <div class="item"><span class="item-name">Prawn</span><span class="item-price">Rs. 200</span></div>
+    </div>
+
+    <div class="subsection-title">Dry Fry Chow</div>
+    <div class="item-list">
+      <div class="item"><span class="item-name">Chicken</span><span class="item-price">Rs. 170</span></div>
+      <div class="item"><span class="item-name">Pork</span><span class="item-price">Rs. 190</span></div>
+      <div class="item"><span class="item-name">Mixed</span><span class="item-price">Rs. 210</span></div>
+      <div class="item"><span class="item-name">Prawn</span><span class="item-price">Rs. 200</span></div>
+    </div>
+
+    <div class="subsection-title">Manchurian Chow</div>
+    <div class="item-list">
+      <div class="item"><span class="item-name">Veg</span><span class="item-price">Rs. 120</span></div>
+      <div class="item"><span class="item-name">Egg</span><span class="item-price">Rs. 140</span></div>
+      <div class="item"><span class="item-name">Chicken</span><span class="item-price">Rs. 160</span></div>
+      <div class="item"><span class="item-name">Pork</span><span class="item-price">Rs. 180</span></div>
+      <div class="item"><span class="item-name">Mixed</span><span class="item-price">Rs. 200</span></div>
+      <div class="item"><span class="item-name">Prawn</span><span class="item-price">Rs. 200</span></div>
+    </div>
+
+    <div class="subsection-title">Singapore Chow</div>
+    <div class="item-list">
+      <div class="item"><span class="item-name">Veg</span><span class="item-price">Rs. 130</span></div>
+      <div class="item"><span class="item-name">Egg</span><span class="item-price">Rs. 150</span></div>
+      <div class="item"><span class="item-name">Chicken</span><span class="item-price">Rs. 170</span></div>
+      <div class="item"><span class="item-name">Pork</span><span class="item-price">Rs. 190</span></div>
+      <div class="item"><span class="item-name">Mixed</span><span class="item-price">Rs. 210</span></div>
+      <div class="item"><span class="item-name">Prawn</span><span class="item-price">Rs. 200</span></div>
+    </div>
+  </div>
+
+  <!-- RICE -->
+  <div class="section" id="rice">
+    <div class="section-title"><span class="icon">🍚</span> Rice Items</div>
+
+    <div class="subsection-title">Fried Rice</div>
+    <div class="item-list">
+      <div class="item"><span class="item-name">Veg</span><span class="item-price">Rs. 110</span></div>
+      <div class="item"><span class="item-name">Egg</span><span class="item-price">Rs. 130</span></div>
+      <div class="item"><span class="item-name">Chicken</span><span class="item-price">Rs. 150</span></div>
+      <div class="item"><span class="item-name">Pork</span><span class="item-price">Rs. 170</span></div>
+      <div class="item"><span class="item-name">Mixed</span><span class="item-price">Rs. 190</span></div>
+      <div class="item"><span class="item-name">Prawn</span><span class="item-price">Rs. 190</span></div>
+    </div>
+
+    <div class="subsection-title">Korean Fried Rice</div>
+    <div class="item-list">
+      <div class="item"><span class="item-name">Veg</span><span class="item-price">Rs. 130</span></div>
+      <div class="item"><span class="item-name">Egg</span><span class="item-price">Rs. 150</span></div>
+      <div class="item"><span class="item-name">Chicken</span><span class="item-price">Rs. 170</span></div>
+      <div class="item"><span class="item-name">Pork</span><span class="item-price">Rs. 190</span></div>
+      <div class="item"><span class="item-name">Mixed</span><span class="item-price">Rs. 200</span></div>
+      <div class="item"><span class="item-name">Prawn</span><span class="item-price">Rs. 200</span></div>
+    </div>
+
+    <div class="subsection-title">Schezwan Fried Rice</div>
+    <div class="item-list">
+      <div class="item"><span class="item-name">Veg</span><span class="item-price">Rs. 130</span></div>
+      <div class="item"><span class="item-name">Egg</span><span class="item-price">Rs. 150</span></div>
+      <div class="item"><span class="item-name">Chicken</span><span class="item-price">Rs. 170</span></div>
+      <div class="item"><span class="item-name">Pork</span><span class="item-price">Rs. 190</span></div>
+      <div class="item"><span class="item-name">Mixed</span><span class="item-price">Rs. 210</span></div>
+      <div class="item"><span class="item-name">Prawn</span><span class="item-price">Rs. 200</span></div>
+    </div>
+
+    <div class="subsection-title">Garlic Fried Rice</div>
+    <div class="item-list">
+      <div class="item"><span class="item-name">Veg</span><span class="item-price">Rs. 120</span></div>
+      <div class="item"><span class="item-name">Egg</span><span class="item-price">Rs. 140</span></div>
+      <div class="item"><span class="item-name">Chicken</span><span class="item-price">Rs. 160</span></div>
+      <div class="item"><span class="item-name">Pork</span><span class="item-price">Rs. 180</span></div>
+      <div class="item"><span class="item-name">Mixed</span><span class="item-price">Rs. 200</span></div>
+      <div class="item"><span class="item-name">Prawn</span><span class="item-price">Rs. 200</span></div>
+    </div>
+
+    <div class="subsection-title">Korean Garlic Fried Rice</div>
+    <div class="item-list">
+      <div class="item"><span class="item-name">Veg</span><span class="item-price">Rs. 130</span></div>
+      <div class="item"><span class="item-name">Egg</span><span class="item-price">Rs. 150</span></div>
+      <div class="item"><span class="item-name">Chicken</span><span class="item-price">Rs. 170</span></div>
+      <div class="item"><span class="item-name">Pork</span><span class="item-price">Rs. 190</span></div>
+      <div class="item"><span class="item-name">Mixed</span><span class="item-price">Rs. 200</span></div>
+      <div class="item"><span class="item-name">Prawn</span><span class="item-price">Rs. 200</span></div>
+    </div>
+
+    <div class="subsection-title">Thai Fried Rice</div>
+    <div class="item-list">
+      <div class="item"><span class="item-name">Veg</span><span class="item-price">Rs. 110</span></div>
+      <div class="item"><span class="item-name">Egg</span><span class="item-price">Rs. 130</span></div>
+      <div class="item"><span class="item-name">Chicken</span><span class="item-price">Rs. 150</span></div>
+      <div class="item"><span class="item-name">Pork</span><span class="item-price">Rs. 170</span></div>
+      <div class="item"><span class="item-name">Mixed</span><span class="item-price">Rs. 190</span></div>
+      <div class="item"><span class="item-name">Prawn</span><span class="item-price">Rs. 190</span></div>
+    </div>
+
+    <div class="subsection-title">Hong Kong Fried Rice</div>
+    <div class="item-list">
+      <div class="item"><span class="item-name">Veg</span><span class="item-price">Rs. 130</span></div>
+      <div class="item"><span class="item-name">Egg</span><span class="item-price">Rs. 150</span></div>
+      <div class="item"><span class="item-name">Chicken</span><span class="item-price">Rs. 170</span></div>
+      <div class="item"><span class="item-name">Pork</span><span class="item-price">Rs. 190</span></div>
+      <div class="item"><span class="item-name">Mixed</span><span class="item-price">Rs. 210</span></div>
+      <div class="item"><span class="item-name">Prawn</span><span class="item-price">Rs. 200</span></div>
+    </div>
+
+    <div class="subsection-title">Nasi Goreng</div>
+    <div class="item-list">
+      <div class="item"><span class="item-name">Chicken</span><span class="item-price">Rs. 180</span></div>
+      <div class="item"><span class="item-name">Pork</span><span class="item-price">Rs. 200</span></div>
+      <div class="item"><span class="item-name">Mixed</span><span class="item-price">Rs. 220</span></div>
+      <div class="item"><span class="item-name">Prawn</span><span class="item-price">Rs. 220</span></div>
+    </div>
+
+    <div class="subsection-title">Singapore Rice</div>
+    <div class="item-list">
+      <div class="item"><span class="item-name">Veg</span><span class="item-price">Rs. 130</span></div>
+      <div class="item"><span class="item-name">Egg</span><span class="item-price">Rs. 150</span></div>
+      <div class="item"><span class="item-name">Chicken</span><span class="item-price">Rs. 170</span></div>
+      <div class="item"><span class="item-name">Pork</span><span class="item-price">Rs. 190</span></div>
+      <div class="item"><span class="item-name">Mixed</span><span class="item-price">Rs. 210</span></div>
+      <div class="item"><span class="item-name">Prawn</span><span class="item-price">Rs. 200</span></div>
+    </div>
+
+    <div class="subsection-title">Korean Ramen Noodles</div>
+    <div class="item-list">
+      <div class="item"><span class="item-name">Egg</span><span class="item-price">Rs. 180</span></div>
+      <div class="item"><span class="item-name">Chicken</span><span class="item-price">Rs. 200</span></div>
+      <div class="item"><span class="item-name">Pork</span><span class="item-price">Rs. 220</span></div>
+      <div class="item"><span class="item-name">Mixed</span><span class="item-price">Rs. 250</span></div>
+    </div>
+
+    <div class="subsection-title">Pepper Rice</div>
+    <div class="item-list">
+      <div class="item"><span class="item-name">Veg</span><span class="item-price">Rs. 150</span></div>
+      <div class="item"><span class="item-name">Egg</span><span class="item-price">Rs. 170</span></div>
+      <div class="item"><span class="item-name">Chicken</span><span class="item-price">Rs. 190</span></div>
+      <div class="item"><span class="item-name">Pork</span><span class="item-price">Rs. 210</span></div>
+      <div class="item"><span class="item-name">Prawn</span><span class="item-price">Rs. 220</span></div>
+    </div>
+  </div>
+
+  <!-- PORK ITEMS -->
+  <div class="section" id="pork">
+    <div class="section-title"><span class="icon">🥩</span> Pork Items</div>
+    <div class="item-list">
+      <div class="item"><span class="item-name">Pork Finger</span><span class="item-price">Rs. 140</span></div>
+      <div class="item"><span class="item-name">Pork Dry Fry</span><span class="item-price">Rs. 180</span></div>
+      <div class="item"><span class="item-name">Pork Mongolian</span><span class="item-price">Rs. 170</span></div>
+      <div class="item"><span class="item-name">Pork Pepper Dry</span><span class="item-price">Rs. 170</span></div>
+      <div class="item"><span class="item-name">Pork Pepper Chilli Butter</span><span class="item-price">Rs. 180</span></div>
+      <div class="item"><span class="item-name">Pork Manchurian (Dry)</span><span class="item-price">Rs. 190</span></div>
+      <div class="item"><span class="item-name">Chilli Pork</span><span class="item-price">Rs. 190</span></div>
+      <div class="item"><span class="item-name">Schezwan Pork (Dry Fry)</span><span class="item-price">Rs. 190</span></div>
+      <div class="item"><span class="item-name">Schezwan Pork (Gravy)</span><span class="item-price">Rs. 200</span></div>
+      <div class="item"><span class="item-name">Pork Mushroom (Dry Fry)</span><span class="item-price">Rs. 220</span></div>
+      <div class="item"><span class="item-name">Pork Mushroom (Gravy)</span><span class="item-price">Rs. 230</span></div>
+      <div class="item"><span class="item-name">Pork Garlic (Dry Fry)</span><span class="item-price">Rs. 180</span></div>
+      <div class="item"><span class="item-name">Pork Garlic (Gravy)</span><span class="item-price">Rs. 190</span></div>
+    </div>
+  </div>
+
+  <!-- CHICKEN ITEMS -->
+  <div class="section" id="chicken">
+    <div class="section-title"><span class="icon">🍗</span> Chicken Items</div>
+    <div class="item-list">
+      <div class="item"><span class="item-name">Chicken Drumstick Dry</span><span class="item-price">Rs. 40/piece</span></div>
+      <div class="item"><span class="item-name">Chicken Schezwan Drumstick (2 pcs)</span><span class="item-price">Rs. 100</span></div>
+      <div class="item"><span class="item-name">Chicken Schezwan Drumstick</span><span class="item-price">Rs. 170</span></div>
+      <div class="item"><span class="item-name">Chicken Dry Fry</span><span class="item-price">Rs. 160</span></div>
+      <div class="item"><span class="item-name">Chicken Manchurian</span><span class="item-price">Rs. 180</span></div>
+      <div class="item"><span class="item-name">Chilli Chicken (Boneless, Dry Fry)</span><span class="item-price">Rs. 170</span></div>
+      <div class="item"><span class="item-name">Chilli Chicken (Boneless, Gravy)</span><span class="item-price">Rs. 180</span></div>
+      <div class="item"><span class="item-name">Chilli Chicken (with Bones, Dry Fry)</span><span class="item-price">Rs. 150</span></div>
+      <div class="item"><span class="item-name">Chilli Chicken (with Bones, Gravy)</span><span class="item-price">Rs. 170</span></div>
+      <div class="item"><span class="item-name">Schezwan Chicken Boneless (Dry Fry)</span><span class="item-price">Rs. 170</span></div>
+      <div class="item"><span class="item-name">Schezwan Chicken Boneless (Gravy)</span><span class="item-price">Rs. 190</span></div>
+      <div class="item"><span class="item-name">Schezwan Chicken (with Bones, Dry Fry)</span><span class="item-price">Rs. 160</span></div>
+      <div class="item"><span class="item-name">Schezwan Chicken (with Bones, Gravy)</span><span class="item-price">Rs. 180</span></div>
+      <div class="item"><span class="item-name">Chicken Mushroom (Dry Fry)</span><span class="item-price">Rs. 200</span></div>
+      <div class="item"><span class="item-name">Chicken Mushroom (Gravy)</span><span class="item-price">Rs. 210</span></div>
+      <div class="item"><span class="item-name">Chicken Garlic (Dry Fry)</span><span class="item-price">Rs. 170</span></div>
+      <div class="item"><span class="item-name">Chicken Garlic (Gravy)</span><span class="item-price">Rs. 190</span></div>
+      <div class="item"><span class="item-name">Chicken Korma</span><span class="item-price">Rs. 270</span></div>
+      <div class="item"><span class="item-name">Cream Chicken</span><span class="item-price">Rs. 250</span></div>
+      <div class="item"><span class="item-name">Chicken Mongolian</span><span class="item-price">Rs. 160</span></div>
+      <div class="item"><span class="item-name">Chicken Butter Masala</span><span class="item-price">Rs. 250</span></div>
+    </div>
+
+    <div class="subsection-title">Prawns Items</div>
+    <div class="item-list">
+      <div class="item"><span class="item-name">Dry Fry Prawns</span><span class="item-price">Rs. 200</span></div>
+      <div class="item"><span class="item-name">Golden Prawns</span><span class="item-price">Rs. 170</span></div>
+      <div class="item"><span class="item-name">Prawn Manchurian</span><span class="item-price">Rs. 190</span></div>
+      <div class="item"><span class="item-name">Garlic Butter Prawns</span><span class="item-price">Rs. 220</span></div>
+      <div class="item"><span class="item-name">Chilli Prawns (Dry Fry)</span><span class="item-price">Rs. 200</span></div>
+      <div class="item"><span class="item-name">Chilli Prawns (Gravy)</span><span class="item-price">Rs. 220</span></div>
+      <div class="item"><span class="item-name">Garlic Prawns (Dry Fry)</span><span class="item-price">Rs. 200</span></div>
+      <div class="item"><span class="item-name">Garlic Prawns (Gravy)</span><span class="item-price">Rs. 220</span></div>
+    </div>
+  </div>
+
+  <!-- INDIAN ITEMS -->
+  <div class="section" id="indian">
+    <div class="section-title"><span class="icon">🍛</span> Indian Items</div>
+    <div class="item-list">
+      <div class="item"><span class="item-name">Plain Roti</span><span class="item-price">Rs. 20/piece</span></div>
+      <div class="item"><span class="item-name">Butter Roti</span><span class="item-price">Rs. 30/piece</span></div>
+      <div class="item"><span class="item-name">Puri &amp; Sabji</span><span class="item-price">Rs. 70</span></div>
+      <div class="item"><span class="item-name">Paratha</span><span class="item-price">Rs. 80</span></div>
+      <div class="item"><span class="item-name">Aloo Paratha</span><span class="item-price">Rs. 80</span></div>
+      <div class="item"><span class="item-name">Chicken Paratha</span><span class="item-price">Rs. 130</span></div>
+      <div class="item"><span class="item-name">Paneer Paratha</span><span class="item-price">Rs. 150</span></div>
+      <div class="item"><span class="item-name">Chicken Cheese Paratha</span><span class="item-price">Rs. 160</span></div>
+      <div class="item"><span class="item-name">Paneer Chilli dry</span><span class="item-price">Rs. 150</span></div>
+      <div class="item"><span class="item-name">Paneer Chilli Gravy</span><span class="item-price">Rs. 170</span></div>
+      <div class="item"><span class="item-name">Paneer Manchurian</span><span class="item-price">Rs. 130</span></div>
+      <div class="item"><span class="item-name">Mattar Paneer</span><span class="item-price">Rs. 150</span></div>
+      <div class="item"><span class="item-name">Hydrabadi Paneer</span><span class="item-price">Rs. 200</span></div>
+    </div>
+
+    <div class="subsection-title">Rice</div>
+    <div class="item-list">
+      <div class="item"><span class="item-name">Steam Rice</span><span class="item-price">Rs. 70</span></div>
+      <div class="item"><span class="item-name">Jeera Rice</span><span class="item-price">Rs. 130</span></div>
+      <div class="item"><span class="item-name">Biryani (Egg)</span><span class="item-price">Rs. 200</span></div>
+      <div class="item"><span class="item-name">Biryani (Chicken)</span><span class="item-price">Rs. 230</span></div>
+    </div>
+
+    <div class="subsection-title">Thali</div>
+    <div class="item-list">
+      <div class="item"><span class="item-name">Veg Thali</span><span class="item-price">Rs. 150</span></div>
+      <div class="item"><span class="item-name">Egg Thali</span><span class="item-price">Rs. 170</span></div>
+      <div class="item"><span class="item-name">Chicken Thali</span><span class="item-price">Rs. 190</span></div>
+      <div class="item"><span class="item-name">Roti with Chicken Curry</span><span class="item-price">Rs. 140</span></div>
+    </div>
+  </div>
+
+  <!-- BEVERAGES -->
+  <div class="section" id="beverages">
+    <div class="section-title"><span class="icon">☕</span> Beverages</div>
+
+    <div class="subsection-title">Tea</div>
+    <div class="item-list">
+      <div class="item"><span class="item-name">Red Tea</span><span class="item-price">Rs. 10</span></div>
+      <div class="item"><span class="item-name">Milk Tea</span><span class="item-price">Rs. 20</span></div>
+      <div class="item"><span class="item-name">Lemon Tea</span><span class="item-price">Rs. 20</span></div>
+      <div class="item"><span class="item-name">Ginger Tea</span><span class="item-price">Rs. 30</span></div>
+    </div>
+
+    <div class="subsection-title">Coffee</div>
+    <div class="item-list">
+      <div class="item"><span class="item-name">Milk Coffee</span><span class="item-price">Rs. 30</span></div>
+      <div class="item"><span class="item-name">Black Coffee</span><span class="item-price">Rs. 30</span></div>
+      <div class="item"><span class="item-name">Cold Coffee</span><span class="item-price">Rs. 60</span></div>
+      <div class="item"><span class="item-name">Hot Chocolate</span><span class="item-price">Rs. 70</span></div>
+      <div class="item"><span class="item-name">Oreo Milkshake</span><span class="item-price">Rs. 80</span></div>
+    </div>
+
+    <div class="subsection-title">Juices</div>
+    <div class="item-list">
+      <div class="item"><span class="item-name">Orange Juice</span><span class="item-price">Rs. 60</span></div>
+      <div class="item"><span class="item-name">Mango Juice</span><span class="item-price">Rs. 60</span></div>
+      <div class="item"><span class="item-name">Pine Apple Juice</span><span class="item-price">Rs. 60</span></div>
+      <div class="item"><span class="item-name">Grapes Juice</span><span class="item-price">Rs. 60</span></div>
+      <div class="item"><span class="item-name">Lemon Juice</span><span class="item-price">Rs. 50</span></div>
+    </div>
+
+    <div class="subsection-title">Cold Drinks</div>
+    <div class="item-list">
+      <div class="item"><span class="item-name">Coca Cola</span><span class="item-price">Rs. 60</span></div>
+      <div class="item"><span class="item-name">Fanta</span><span class="item-price">Rs. 60</span></div>
+      <div class="item"><span class="item-name">Sprite</span><span class="item-price">Rs. 60</span></div>
+      <div class="item"><span class="item-name">Lassi</span><span class="item-price">Rs. 80</span></div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  © Tasty Trails · All prices in Indian Rupees · Taxes may apply
+</footer>
+
+<script>
+  function goToSection(id, btn) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    // Make section visible in case it was hidden
+    el.style.display = '';
+    const offset = 110; // height of sticky header + tabs
+    const top = el.getBoundingClientRect().top + window.pageYOffset - offset;
+    window.scrollTo({ top: top, behavior: 'smooth' });
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+
+  function filterMenu(query) {
+    const q = query.toLowerCase().trim();
+    document.querySelectorAll('.item').forEach(item => {
+      const name = item.querySelector('.item-name').textContent.toLowerCase();
+      item.classList.toggle('hidden', q && !name.includes(q));
+    });
+    document.querySelectorAll('.section').forEach(section => {
+      const visItems = section.querySelectorAll('.item:not(.hidden)');
+      section.style.display = (q && visItems.length === 0) ? 'none' : '';
+    });
+  }
+</script>
+</body>
+</html>
